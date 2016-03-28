@@ -12,14 +12,9 @@ class Person
 	@birthday
 	@currentDate
 	
-	attr_accessor = :firstName, :lastName, :name, :age, :birthday, :currentDate
+	attr_accessor :firstName, :lastName, :name, :age, :birthday, :currentDate, :db
 	
-	def initialize(firstName, lastName, birthday)
-		@firstName = firstName
-		@lastName = lastName
-		@name = firstName+" "+lastName
-		@birthday = DateTime.parse(birthday)
-		@currentDate = DateTime.now
+	def initialize
 	end
 	
 	def greet
@@ -28,7 +23,7 @@ class Person
 	
 	def calculateAge
 		@age = (@currentDate - @birthday)/365.25
-		@age = @age.floor
+		# @age = @age.floor
 	end
 	
 	def getAge
@@ -40,7 +35,11 @@ class Person
 	end
 	
 	def saveInfo
+		@name = @firstName+" "+@lastName
+		@birthday = DateTime.parse(@birthday)
+		@currentDate = DateTime.now
 		db = SQLite3::Database.new(File.expand_path("../",File.dirname(__FILE__))+'/shared.db')
+		
 		rows = db.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='person';")
 		puts rows.length
 		if (rows.length == 0)
@@ -55,6 +54,15 @@ class Person
 		stm.bind_param 2, @lastName
 		stm.bind_param 3, @birthday.to_s
 		stm.execute
+	end
+	
+	def self.clearPeople
+	db = SQLite3::Database.new(File.expand_path("../",File.dirname(__FILE__))+'/shared.db')
+		rows = db.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='person';")
+		if (rows.length > 0)
+			db.execute('drop table person')
+			puts '"person" table dropped.'
+		end
 	end
 	
 	def countPeople
