@@ -3,12 +3,12 @@ require 'sqlite3'
 
 class Person
 	#name is derived from firstName and lastName
-	@name=""
-	@firstName=""
-	@lastName=""
+	@name
+	@firstName
+	@lastName
 	
 	#age derived from currentDate - birthday
-	@age=0
+	@age
 	@birthday
 	@currentDate
 	
