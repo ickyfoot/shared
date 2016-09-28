@@ -36,7 +36,7 @@ class Person
 	
 	def saveInfo
 		@name = @firstName+" "+@lastName
-		@birthday = DateTime.parse(@birthday.to_s)
+		@birthday = DateTime.strptime(@birthday.to_s, '%m/%d/%Y')
 		@currentDate = DateTime.now
 		db = SQLite3::Database.new(File.expand_path("../",File.dirname(__FILE__))+'/shared.db')
 		
